@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>CamionesApp</title>
+        <link rel="shortcut icon" href="images/icon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+				<meta name="author" content="architeq.cl" />     
+        
+        <link rel="stylesheet" href="css/themes/themes.min.css" />
+				<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/ >
+	
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<script src="js/jquery-1.11.1.min.js"></script>
+
+	
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/jquery.datetimepicker.js"></script>
+	<script src="js/funciones.js"></script>
+	 			<script src="cordova.js"></script>
+   			
+   			
+   			<script>
+   				$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+   				//document.addEventListener("offline", offline, false);
+					//document.addEventListener("online", online, false);
+   				document.addEventListener("deviceready", deviceListo, false);
+   				
+   				</script>
+    </head>
+    <body>
+    <div data-role="page" id="mappage" data-theme="a">
+<div data-role="panel" id="mypanel2" data-theme="a" style="z-index:99999;" data-position="right" data-display="overlay">
+    	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
+						<ul data-role="listview" data-inset="true" data-divider-theme="a">
+						    <li data-role="list-divider">Men&uacute;</li>
+						    <li><a href="javascript:loadReporte();">Reportes</a></li>
+						    <li><a href="javascript:loadayuda();">Ayuda</a></li>
+						    <li><a href="javascript:$('#mypanel2').panel( 'close' );loadInicio();loadMenu();">Refrescar</a></li>
+						    <li id="men_pan"><a href="javascript:salir();">Salir</a></li>
+						  
+						    
+						</ul>			
+						<span id=footer_txt>Versi&oacute;n 1.0</span>
+					</div><!-- /panel -->
+   		<div data-role="header">   			 
+   			
+      	<h3><img src="img/logo_peque2.png" width=70%></h3>
+      	<a id="btn-conf"  href="#mypanel2" data-icon="bars" data-role="button" data-iconpos="notext"  id="bot_conf" class="ui-btn-right">+</a>
+      	
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido_prin" >
+   	  	<div data-role="popup" id="myPopup" class="ui-content">
+							<p>This is a popup with the <code>ui-content</code> class added to the popup container.</p>
+					</div>
+				
+					<div data-role="popup" id="myPopup_static" class="ui-content" style="max-width:280px" data-dismissible="false">
+				    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+						<div id=cont_static></div>
+					</div>
+					<div id="menu_sesion">
+					</div>
+	        <div id="pantalla_inicio">
+	        <div id="inicio_sesion">
+	        	<br><img src="img/camion2.png" width=40%><br><br>
+						<input class=input_form  type="text" id="user" name="user" value="" placeholder="RUT">
+						<input type="button" onclick="valida();" value="Ingresar">
+					</div>
+	        </div>
+					
+					
+    	    </div>
+    	<div data-role="footer" data-id="foo1" data-position="fixed" id="footer_txt" data-theme="b">
+				<div id="menu_footer"></div>
+    		
+    			&copy;2015 Architeq Ltda
+			</div><!-- /footer -->
+
+ </div>
+  <div data-role="page" id="mod_enrol" data-theme="a">
+
+   	<div data-role="header" >
+	   			
+      		<h3><img src="img/logo_peque2.png" width=50%></h3>
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido" >
+   	  	
+    	  	<div data-role="popup" id="myPopup_enrol">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					
+					
+    	    <div id="contenido_usuarios">
+						
+						
+					</div>          
+					
+    	</div>
+    	  
+ 		</div>	
+	
+ 		
+ 			<div id=output></div>
+
+    </body>
+</html>
