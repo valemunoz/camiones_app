@@ -46,7 +46,7 @@
 }
 .mini_txt
 {
-	font-size=8px !important;
+	font-size=80% !important;
 }
 .txt_titulo
 {
@@ -204,7 +204,7 @@
 	text-align: center !important;
   margin-left:0 auto !important;
   margin-right:0 auto !important;
-  font-size:150%;
+  font-size:120%;
   font-weight:bold;
 }
 .titulo_2
@@ -217,9 +217,9 @@
 #tabla_opc
 {
 	margin: 0 auto;
-  width:80% !important;
+  width:90% !important;
 	height:30px !important;
-	font-size:120% !important;
+	font-size:90% !important;
 }
 #titulo_3
 {
@@ -237,4 +237,21 @@
 	font-size:80% !important;
 	color:#8E878F;
 	
+}
+#timepicker1
+{
+font-size:150% !important;
+}
+#timepicker2
+{
+font-size:150% !important;
+}
+#myPopup
+{
+	width:200px !important;
+	font-size: 40px !important;
+}
+#desde_accion
+{
+	font-size:150% !important;
 }

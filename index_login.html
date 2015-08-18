@@ -40,36 +40,46 @@
 			});
    				document.addEventListener("offline", offline, false);
 					document.addEventListener("online", online, false);
-   				document.addEventListener("deviceready", deviceListo, false);
+   				document.addEventListener("deviceready", loadLogin, false);
    				
    				</script>
     </head>
     <body>
     <div data-role="page" id="mappage" data-theme="a">
-
+<div data-role="panel" id="mypanel2" data-theme="a" style="z-index:99999;" data-position="right" data-display="overlay">
+    	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
+						<ul data-role="listview" data-inset="true" data-divider-theme="a">
+						    <li data-role="list-divider">Men&uacute;</li>
+						    <li><a href="javascript:loadReporte();">Reportes</a></li>
+						    <li><a href="javascript:loadHistorialMenu();">Historial</a></li>
+						    <li><a href="javascript:jornadaAnterior();">Jornada Anterior</a></li>
+						    <li><a href="javascript:loadayuda();">Ayuda</a></li>
+						    <li><a href="javascript:$('#mypanel2').panel( 'close' );loadInicio();loadMenu();">Refrescar</a></li>
+						    <li id="men_pan"><a href="javascript:cerrarSesion();">Salir</a></li>
+						  
+						    
+						</ul>			
+						<span id=footer_txt>Versi&oacute;n 1.0</span>
+					</div><!-- /panel -->
    		<div data-role="header">   			 
    			
       	<h3><img src="img/logo_peque2.png" width=70%></h3>
-      	
+      	<a id="btn-conf"  href="#mypanel2" data-icon="bars" data-role="button" data-iconpos="notext"  id="bot_conf" class="ui-btn-right">+</a>
       	
       		
    		</div>    		
-   	  <div data-role="content" id="contenido_prin" >
-  
+   	  <div data-role="content" id="contenido_prin2" >
+
 				
 					<div data-role="popup" id="myPopup_static" class="ui-content" style="max-width:280px" data-dismissible="false">
 				    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
 						<div id=cont_static></div>
 					</div>
-			
-	        <div id="pantalla_inicio2">
-	        <div id="inicio_sesion">
-	        	<br><img src="img/camion2.png" width=40%><br><br>
-						<input class=input_form  type="text" id="user" name="user" value="" placeholder="RUT">
-						<input type="button" onclick="valida();" value="Ingresar">
+					<div id="menu_sesion">
 					</div>
-	        </div>
-					
+						<p>
+							<div id="pantalla_inicio">
+    	    </div>
 					
     	    </div>
     	<div data-role="footer" data-id="foo1" data-position="fixed" id="footer_txt" data-theme="b">
@@ -79,10 +89,32 @@
 			</div><!-- /footer -->
 
  </div>
+  <div data-role="page" id="mod_enrol" data-theme="a">
 
+   	<div data-role="header" >
+	   			
+      		<h3><img src="img/logo_peque2.png" width=50%></h3>
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido" >
+   	  	
+    	  	<div data-role="popup" id="myPopup_enrol">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					
+					
+    	    <div id="contenido_usuarios">
+						
+						
+					</div> 
+					<div id="output3"></div>         
+					
+    	</div>
+    	  
+ 		</div>	
 	
  		
- 			<div id=output2></div>
+ 			<div id=output></div>
 
     </body>
 </html>
