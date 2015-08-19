@@ -377,7 +377,7 @@ function loadMensajeria()
 		);
 	
 }
-function openMensaje()
+function openMensaje(id_mensaje)
 {
 		$.mobile.loading( 'show', {
 				text: 'Cargando...',
@@ -387,7 +387,7 @@ function openMensaje()
 			});
 		
 		$("#contenido_usuarios").load(PATH_QUERY, 
-					{tipo:10} 
+					{tipo:10,id_mensaje:id_mensaje} 
 						,function(){
 							$('#contenido_usuarios').trigger('create');
 							
@@ -399,7 +399,7 @@ function openMensaje()
 		);
 }
 
-function nuevoMensaje(tipo)
+function nuevoMensaje(tipo,ids)
 {
 		$.mobile.loading( 'show', {
 				text: 'Cargando...',
@@ -409,7 +409,7 @@ function nuevoMensaje(tipo)
 			});
 		
 		$("#contenido_usuarios").load(PATH_QUERY, 
-					{tipo:11, opc:tipo} 
+					{tipo:11, opc:tipo, ids:ids} 
 						,function(){
 							$('#contenido_usuarios').trigger('create');
 							
