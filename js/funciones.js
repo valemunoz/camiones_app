@@ -1,5 +1,7 @@
 var PATH_QUERY="http://obvii.net/obvii/app_camion/query.php";
 var AC_ONLINE=false;
+var AC_MAIL_TO=Array();
+var AC_MAIL_TO_GROUP=Array();
 function mensaje(CM_mensaje,titulo,div)
 {
 	
@@ -377,7 +379,7 @@ function loadMensajeria()
 		);
 	
 }
-function openMensaje(id_mensaje)
+function openMensaje(id_mensaje,id_log)
 {
 		$.mobile.loading( 'show', {
 				text: 'Cargando...',
@@ -387,8 +389,9 @@ function openMensaje(id_mensaje)
 			});
 		
 		$("#contenido_usuarios").load(PATH_QUERY, 
-					{tipo:10,id_mensaje:id_mensaje} 
+					{tipo:10,id_mensaje:id_mensaje,id_log:id_log} 
 						,function(){
+			
 							$('#contenido_usuarios').trigger('create');
 							
 							$.mobile.loading( 'hide');	
@@ -408,6 +411,8 @@ function nuevoMensaje(tipo,ids)
 				html: ""
 			});
 		
+		AC_MAIL_TO=Array();
+		AC_MAIL_TO_GROUP=Array();
 		$("#contenido_usuarios").load(PATH_QUERY, 
 					{tipo:11, opc:tipo, ids:ids} 
 						,function(){
@@ -420,13 +425,17 @@ function nuevoMensaje(tipo,ids)
 						}
 		);
 }
-function addTo(to)
+function addTo(to,id_to)
 {
+	
+	AC_MAIL_TO_GROUP[AC_MAIL_TO_GROUP.length]=id_to;
 	var dest=document.getElementById("destin").innerHTML ;
 	$( "#destin" ).html(dest+", "+to); 
 }
-function addTo2(to)
+function addTo2(to,id_to)
 {
+	
+	AC_MAIL_TO[AC_MAIL_TO.length]=id_to;
 	var dest=document.getElementById("destin2").innerHTML ;
 	$( "#destin2" ).html(dest+", "+to); 
 }
@@ -436,8 +445,22 @@ function addMensajePre(texto)
 }
 function sendMensaje()
 {
-	$("#mod_enrol").dialog( "close" );
-	setTimeout('openPopstatic("Mensaje Enviado",3000);',1000);
+	var mensaje=$.trim(document.getElementById("contenido_mensaje").value);
+	$.mobile.loading( 'show', {
+				text: 'Enviando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		
+
+		$("#contenido_usuarios").load(PATH_QUERY, 
+					{tipo:26, to:AC_MAIL_TO, to_group:AC_MAIL_TO_GROUP,mensaje:mensaje} 
+						,function(){
+							
+						}
+		);
+	
 }
 function cerrarSesion()
 {
@@ -725,4 +748,13 @@ function validaTarea(jornada)
 function opcAuxiliar()
 {
 	document.getElementById("comentario").value=document.getElementById("opc_aux").value;
+}
+function limpiarMensaje()
+{
+		AC_MAIL_TO=Array();
+		AC_MAIL_TO_GROUP=Array();
+		$( "#destin" ).html(""); 
+		$( "#destin2" ).html(""); 
+		$( "#contenido_mensaje" ).html(""); 
+	
 }
