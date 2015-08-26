@@ -263,14 +263,21 @@ function loadaux()
 }
 function loadReporte()
 {
-	$("#mypanel2").panel( "close" );
-	var texto="Ingrese un mail y seleccione una opci&oacute;n</hr><br><br>";
-	texto +="<input type='text' id='m_mail' name='m_mail' class=input_form><br>";
-		texto +="<input type='button' value='Hoy' class=bottom_coment onclick=''><br>";
-		texto +="<input type='button' value='Esta Semana' class=bottom_coment onclick=''><br>";
-		texto +="<input type='button' value='Mes Pasado' class=bottom_coment onclick=''><br>";
-		texto +="<input type='button' value='Ultimos 3 meses' class=bottom_coment onclick=''><br>";		
-		openPopstatic(texto,0);
+	$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+	$("#output").load(PATH_QUERY, 
+					{tipo:28} 
+						,function(){	
+							$.mobile.loading( 'hide');	
+							
+							
+						}
+		);
+	
 }
 function editarJornada(jornada)
 {
@@ -757,4 +764,43 @@ function limpiarMensaje()
 		$( "#destin2" ).html(""); 
 		$( "#contenido_mensaje" ).html(""); 
 	
+}
+function reportes()
+{
+	
+	$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+										
+				$("#pantalla_inicio").load(PATH_QUERY, 
+				{tipo:27} 
+					,function(){
+						$("#mypanel2").panel( "close" );					
+						$('#pantalla_inicio').trigger('create');	
+						$.mobile.loading( 'hide');	
+						
+						
+					}
+				);
+}
+function sendReporte(tipo_rep)
+{
+	var m_mail=$.trim(document.getElementById("m_mail").value);
+		$.mobile.loading( 'show', {
+					text: 'Enviando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+										
+				$("#output").load(PATH_QUERY, 
+				{tipo:29,tipo_rep:tipo_rep,m_mail:m_mail} 
+					,function(){
+						
+						
+					}
+				);
 }
