@@ -248,8 +248,9 @@ font-size:150% !important;
 }
 #myPopup
 {
-	width:200px !important;
-	font-size: 40px !important;
+	min-width:200px !important;
+	font-size: 120% !important;
+	color:#727272;
 }
 #desde_accion
 {
@@ -264,4 +265,38 @@ font-size:150% !important;
 {
 	font-size:130% !important;
 	color:#0000B3;
+}
+#tabla_opc2
+{
+	margin: 0 auto;
+  width:60% !important;
+	
+	font-size:90% !important;
+	font-weight:bold;
+	text-align:center !important;
+	border:2px #0000FF solid;
+}
+#panel_derecho li
+{
+	height:50px !important;
+}
+#list_reporte
+{
+	text-align:center !important;
+	
+}
+#myPopup_page
+{
+	width:200px !important;
+	font-size: 120% !important;
+	
+}
+#map
+{
+	height:80% !important;
+}
+#msg_error
+{
+	font-weight:bold;
+	
 }

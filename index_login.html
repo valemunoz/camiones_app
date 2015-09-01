@@ -20,9 +20,11 @@
 
 	
 	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/style.mobile.css" type="text/css">
 	<script src="js/jquery-1.11.1.min.js"></script>
 
-	
+	<script type="text/javascript" src="http://obvii.net/obvii/OpenLayers/OpenLayers.js" onload="jsLoadedMapa=true;"></script>  
+	<script src="js/funciones_api_mobile_basica.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
 	<script src="js/jquery.datetimepicker.js"></script>
 	<script src="js/funciones.js"></script>
@@ -50,11 +52,13 @@
     	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
 						<ul data-role="listview" data-inset="true" data-divider-theme="a" id="panel_derecho">
 						    <li data-role="list-divider">Men&uacute;</li>
+						    <li><a href="javascript:$('#mypanel2').panel( 'close' );loadInicio();loadMenu();">Refrescar</a></li>
 						    <li><a href="javascript:reportes();">Reportes</a></li>
 						    <li><a href="javascript:loadHistorialMenu();">Historial</a></li>
 						    <li><a href="javascript:jornadaAnterior();">Jornada Anterior</a></li>
-						    <li><a href="javascript:loadayuda();">Ayuda</a></li>
-						    <li><a href="javascript:$('#mypanel2').panel( 'close' );loadInicio();loadMenu();">Refrescar</a></li>
+						   <li><a href="javascript:loadMapa();">Mapa</a></li>						    
+						    <li><a href="javascript:loadayuda();">Ayuda</a></li>						    
+						    <li><a href="javascript:sendEmergencia();">EMERGENCIA</a></li>
 						    <li id="men_pan"><a href="javascript:cerrarSesion();">Salir</a></li>
 						  
 						    
@@ -75,7 +79,10 @@
 				    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
 						<div id=cont_static></div>
 					</div>
-					<div data-role="popup" id="myPopup_page">
+					<div data-role="popup" id="myPopup_pag">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					<div data-role="popup" id="myPopup">
 							<p>This is a completely basic popup, no options set.						</p>
 					</div>
 					<div id="menu_sesion">

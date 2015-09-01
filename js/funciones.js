@@ -2,6 +2,9 @@ var PATH_QUERY="http://obvii.net/obvii/app_camion/query.php";
 var AC_ONLINE=false;
 var AC_MAIL_TO=Array();
 var AC_MAIL_TO_GROUP=Array();
+	var SIS_LON=0;
+  var SIS_LAT=0;
+  var SIS_ACCU=0;
 function mensaje(CM_mensaje,titulo,div)
 {
 	
@@ -57,7 +60,7 @@ function deviceListo()
 }
 function valida()
 {
-	
+
 	if(!AC_ONLINE)
 	{
 		openPopstatic("Conexion a internet no disponible. Por favor revise.",3000);
@@ -436,15 +439,15 @@ function addTo(to,id_to)
 {
 	
 	AC_MAIL_TO_GROUP[AC_MAIL_TO_GROUP.length]=id_to;
-	var dest=document.getElementById("destin").innerHTML ;
-	$( "#destin" ).html(dest+", "+to); 
+	//var dest=document.getElementById("destin").innerHTML ;
+	//$( "#destin" ).html(dest+", "+to); 
 }
 function addTo2(to,id_to)
 {
 	
 	AC_MAIL_TO[AC_MAIL_TO.length]=id_to;
-	var dest=document.getElementById("destin2").innerHTML ;
-	$( "#destin2" ).html(dest+", "+to); 
+	//var dest=document.getElementById("destin2").innerHTML ;
+	//$( "#destin2" ).html(dest+", "+to); 
 }
 function addMensajePre(texto)
 {
@@ -758,11 +761,14 @@ function opcAuxiliar()
 }
 function limpiarMensaje()
 {
-		AC_MAIL_TO=Array();
-		AC_MAIL_TO_GROUP=Array();
-		$( "#destin" ).html(""); 
-		$( "#destin2" ).html(""); 
-		$( "#contenido_mensaje" ).html(""); 
+		//AC_MAIL_TO=Array();
+		//AC_MAIL_TO_GROUP=Array();
+		//$( "#destin" ).html(""); 
+		//$( "#destin2" ).html(""); 
+		//$( "#contenido_mensaje" ).html(""); 
+	
+	$( "#contenido_mensaje" ).html(""); 
+	
 	
 }
 function reportes()
@@ -803,4 +809,131 @@ function sendReporte(tipo_rep)
 						
 					}
 				);
+}
+function sendEmergencia()
+{
+	$("#mypanel2").panel( "close" );
+	
+	$.mobile.loading( 'show', {
+				text: 'Obteniendo Coordenadas...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			
+	navigator.geolocation.getCurrentPosition (function (pos)
+		{
+			var lat = pos.coords.latitude;
+  		var lng = pos.coords.longitude;
+  		var accu=pos.coords.accuracy.toFixed(2);
+  		
+  		SIS_LON=lng;
+  		SIS_LAT=lat;
+  		SIS_ACCU=accu;
+			$("#output").load(PATH_QUERY, 
+				{tipo:30,lat:SIS_LAT,lon:SIS_LON,accu:SIS_ACCU} 
+					,function(){
+						
+						$.mobile.loading( 'hide');	
+						openPopstatic("Mensaje Enviado.",3000);
+					}
+				);
+		},noLocation,{timeout:6000});
+
+}
+function noLocation()
+{
+	$.mobile.loading( 'hide');	
+	$("#output").load(PATH_QUERY, 
+				{tipo:30,lat:0,lon:0,accu:0} 
+					,function(){						
+						$.mobile.loading( 'hide');	
+						openPopstatic("Mensaje Enviado.",3000);
+					}
+				);
+}
+
+function loadMapa()
+{
+		$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+										
+				$("#pantalla_inicio").load(PATH_QUERY, 
+				{tipo:31} 
+					,function(){
+						$("#mypanel2").panel( "close" );					
+						$('#pantalla_inicio').trigger('create');	
+						
+						init( -70.668343,-33.451259,11);
+						setTimeout("getLocation();",500);
+						$.mobile.loading( 'hide');	
+					}
+				);
+	
+}
+
+function getLocation()
+{
+	$.mobile.loading( 'show', {
+				text: 'Obteniendo Coordenadas...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+			
+	navigator.geolocation.getCurrentPosition (function (pos)
+		{
+			var lat = pos.coords.latitude;
+  		var lng = pos.coords.longitude;
+  		var accu=pos.coords.accuracy.toFixed(2);
+  		
+  		SIS_LON=lng;
+  		SIS_LAT=lat;
+  		SIS_ACCU=accu;
+  		moverCentro(SIS_LAT,SIS_LON,16);
+			addMarcadores(SIS_LON,SIS_LAT,"Ubicaci&oacute;n actual<hr><strong>Enviar por correo</strong><br><input type='text' name='mail_envia'  id='mail_envia' class=input_form><br><input class=bottom_coment type='button' value='Enviar' onclick='enviaPosicion();'><br><div id=msg_error></div>","img/marker.png",45,45);
+
+			
+			$.mobile.loading( 'hide');	
+		},noLocation2,{timeout:6000});
+
+	
+}
+function noLocation2()
+{
+	openPopstatic("No fue posible obtener ubicacion actual. Revise que su GPS este activado.",3000);
+	$.mobile.loading( 'hide');	
+}
+function moveOn()
+{
+}
+function enviaPosicion()
+{
+	var mail_envia=$.trim(document.getElementById("mail_envia").value);
+	
+	if(validarEmail(mail_envia))
+	{
+		$("#output").load(PATH_QUERY, 
+				{tipo:32,lat:SIS_LAT,lon:SIS_LON,mail:mail_envia} 
+					,function(){						
+						$.mobile.loading( 'hide');	
+							$("#msg_error").html("Mail Enviado Exitosamente");
+					}
+				);
+	}else
+		{
+			$("#msg_error").html("Mail ingresado en invalido");
+		}
+}
+function validarEmail( email ) {
+	  var valido=true;
+    expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if ( !expr.test(email) )
+        valido=false;
+        
+   return valido;     
 }
