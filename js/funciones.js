@@ -5,13 +5,15 @@ var AC_MAIL_TO_GROUP=Array();
 	var SIS_LON=0;
   var SIS_LAT=0;
   var SIS_ACCU=0;
+var AC_MAIL_ADMIN="";  
+
 function mensaje(CM_mensaje,titulo,div)
 {
 	
 	var html_msg="";
 	if(titulo!="")
 	{
-		html_msg +="<div class=titulo>"+titulo.toUpperCase()+"</div>";
+		html_msg +="<div class=titulo_1>"+titulo.toUpperCase()+"</div>";
 	}
   html_msg +="<p>"+CM_mensaje+"</p>";
 	$( "#"+div ).html(html_msg); 
@@ -146,15 +148,28 @@ function loadAccion(tipo,jornada,accion_actual)
 						,function(){
 							$('#contenido_usuarios').trigger('create');
 							$.mobile.loading( 'hide');	
-							$('#timepicker1').timepicki({show_meridian:false,
-																					min_hour_value:0,
-																					max_hour_value:23,
-																					
-																					overflow_minutes:true,
-																					increase_direction:'up',
-																					disable_keyboard_mobile: true});
-																					
-							$( "#desde_accion" ).datetimepicker({timepicker:false,format:'Y-m-d',lang:'es'});																					
+							
+							 			 $(document).ready(function () {
+           
+             $('#desde_accion').scroller({ preset: 'datetime' });
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde_accion').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                 
+                
+            });
+
+        });																			
 							$.mobile.changePage('#mod_enrol', {transition: 'pop', role: 'dialog'});
 							
 							
@@ -163,7 +178,7 @@ function loadAccion(tipo,jornada,accion_actual)
 
 	}else
 		{
-			openPopstatic("Esta accion se ecnuentra actualmente iniciada.",4000);
+			openPopstatic("Esta accion se encuentra actualmente iniciada.",4000);
 		}
 		
 }
@@ -171,8 +186,8 @@ function iniciarAccion(tipo,jornada)
 {
 	//openPopstatic("Accion Iniciada",4000);
 	var fecha=$.trim(document.getElementById("desde_accion").value);
-				var hora=$.trim(document.getElementById("timepicker1").value);
-				var time=""+fecha+" "+hora+":00";
+				
+				var time=fecha;
 	$.mobile.loading( 'show', {
 				text: 'Iniciando...',
 				textVisible: true,
@@ -248,6 +263,54 @@ function loadaux()
 						,function(){
 							
 							$('#pantalla_inicio').trigger('create');
+  			
+  			 $(document).ready(function () {
+           
+             $('#desde').scroller({ preset: 'datetime' });
+            $('#hasta').scroller({ preset: 'datetime' });
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                 $('#hasta').scroller('destroy').scroller({  preset: 'datetime',theme: t, mode: m });
+                
+            });
+
+        });
+  			
+  			$("#comentario").prop('disabled', true);
+							$.mobile.loading( 'hide');	
+							
+							
+							
+						}
+		);
+		
+		
+}
+function loadauxEdit(jornada)
+{
+	$("#mod_enrol").dialog( "close" );
+	$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		
+		$("#pantalla_inicio").load(PATH_QUERY, 
+					{tipo:6,jornada:jornada} 
+						,function(){
+							
+							$('#pantalla_inicio').trigger('create');
 							
 								 $(function() {
     		$( "#desde" ).datetimepicker({timepicker:true,format:'Y-m-d H:i:00',lang:'es'});
@@ -282,7 +345,7 @@ function loadReporte()
 		);
 	
 }
-function editarJornada(jornada)
+function editarJornada(jornada)  
 {
 	$.mobile.loading( 'show', {
 				text: 'Cargando...',
@@ -295,9 +358,30 @@ function editarJornada(jornada)
 					{tipo:7,jornada:jornada} 
 						,function(){
 							$('#pantalla_inicio').trigger('create');
-							 $(function() {
-    							$( "#fjornada" ).datetimepicker({timepicker:true,format:'Y-m-d H:i:00',lang:'es'});
-  						});	
+							 
+  													$(document).ready(function () {
+           
+             $('#fjornada').scroller({ preset: 'datetime' });
+             
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#fjornada').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                
+                 
+                
+            });
+
+        });	
 							$.mobile.loading( 'hide');	
 							
 							
@@ -320,25 +404,29 @@ function editRegistro(id_accion,jornada)
 					{tipo:8,id:id_accion, jornada:jornada} 
 						,function(){
 							$('#contenido_usuarios').trigger('create');
-							$(function() {
-    							$( "#desde_ec" ).datetimepicker({timepicker:false,format:'Y-m-d',lang:'es'});
-    							$( "#hasta_ec" ).datetimepicker({timepicker:false,format:'Y-m-d',lang:'es'});
-    							$('#timepicker1_ec').timepicki({show_meridian:false,
-																					min_hour_value:0,
-																					max_hour_value:23,
-																					
-																					overflow_minutes:true,
-																					increase_direction:'up',
-																					disable_keyboard_mobile: true});
-																					
-								$('#timepicker2_ec').timepicki({show_meridian:false,
-																					min_hour_value:0,
-																					max_hour_value:23,
-																					
-																					overflow_minutes:true,
-																					increase_direction:'up',
-																					disable_keyboard_mobile: true});																					
-  						});	
+							$(document).ready(function () {
+           
+             $('#desde_ec').scroller({ preset: 'datetime' });
+             $('#hasta_ec').scroller({ preset: 'datetime' });
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde_ec').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                $('#hasta_ec').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                 
+                
+            });
+
+        });	
 							$.mobile.loading( 'hide');	
 							$.mobile.changePage('#mod_enrol', { role: 'dialog'});
 							
@@ -501,6 +589,8 @@ function online()
 function loadLogin()
 {
 	
+	setInterval("checkEstadoConductor();",60000);
+	
 	$.mobile.loading( 'show', {
 					text: 'Cargando...',
 					textVisible: true,
@@ -518,8 +608,53 @@ function loadLogin()
 				);
 	
 }
+function iniciarJornadaTime(id_jornada)
+{
+$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		$("#contenido_usuarios").load(PATH_QUERY, 
+					{tipo:35,jornada:id_jornada} 
+						,function(){
+							$('#contenido_usuarios').trigger('create');
+							$.mobile.loading( 'hide');	
+								 $(document).ready(function () {
+           
+             $('#desde_ec').scroller({ preset: 'datetime' });
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde_ec').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                 
+                
+            });
+
+        });																					
+							
+							$.mobile.changePage('#mod_enrol', {transition: 'pop', role: 'dialog'});
+							
+							
+						}
+		);
+
+}
 function iniciarJornada(id_jornada)
 {
+	var desde_ec=$.trim(document.getElementById("desde_ec").value);
+	
+
 	$.mobile.loading( 'show', {
 					text: 'Cargando...',
 					textVisible: true,
@@ -529,11 +664,10 @@ function iniciarJornada(id_jornada)
 				
 						
 				$("#output").load(PATH_QUERY, 
-				{tipo:16, jornada:id_jornada } 
+				{tipo:16, jornada:id_jornada,fecha:desde_ec } 
 					,function(){
 					
-						$.mobile.loading( 'hide');	
-						loadResumen();
+						
 						
 					}
 				);
@@ -543,9 +677,13 @@ function iniciarJornada(id_jornada)
 
 function prePublicar(jornada)
 {
-	openPopstatic("Una vez publicado no podra agregar mas actividades pero si editar las existentes <input type='button' class=bottom_coment onclick='publicar("+jornada+");' value='Publicar'>",0);
+	openPopstatic("Una vez Terminado no podra agregar mas actividades pero si editar las existentes <input type='button' class=bottom_coment onclick='terminar("+jornada+");' value='Terminar Jornada'>",0);
 }
-function publicar(jornada)
+function prePublicar2(jornada)
+{
+	openPopstatic("Una vez publicado no podra agregar mas actividades antes de esta hora pero si agregar nuevas actividades <input type='button' class=bottom_coment onclick='publicar("+jornada+");' value='Publicar'>",0);
+}
+function terminar(jornada)
 {
 	$("#myPopup_static").popup("close");
 	$.mobile.loading( 'show', {
@@ -566,13 +704,34 @@ function publicar(jornada)
 					}
 				);
 }
-
+function publicar(jornada)
+{
+	$("#myPopup_static").popup("close");
+	$.mobile.loading( 'show', {
+					text: 'Publicando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+						
+				$("#output").load(PATH_QUERY, 
+				{tipo:33, jornada:jornada } 
+					,function(){
+					
+						$.mobile.loading( 'hide');	
+						loadInicio();
+						openPopstatic("Jornada Publicada",3000);
+						
+					}
+				);
+}
 function saveAccion(id_accion, jornada)
 {
 	var fec_ini=$.trim(document.getElementById("desde_ec").value);
-	var hora_ini=$.trim(document.getElementById("timepicker1_ec").value);
+	
 	var fec_ter=$.trim(document.getElementById("hasta_ec").value);
-	var hora_ter=$.trim(document.getElementById("timepicker2_ec").value)+"";
+	
 	comentario="";
 	try {
     var comentario=$.trim(document.getElementById("comentario_ec").value)+"";
@@ -591,7 +750,7 @@ function saveAccion(id_accion, jornada)
 				
 						
 				$("#output3").load(PATH_QUERY, 
-				{tipo:19, id:id_accion,fec_ini:fec_ini, fec_ter:fec_ter,hora_ini:hora_ini,hora_ter:hora_ter,jornada:jornada,comentario:comentario } 
+				{tipo:19, id:id_accion,fec_ini:fec_ini, fec_ter:fec_ter,jornada:jornada,comentario:comentario } 
 					,function(){
 					
 						
@@ -757,7 +916,18 @@ function validaTarea(jornada)
 }
 function opcAuxiliar()
 {
-	document.getElementById("comentario").value=document.getElementById("opc_aux").value;
+	var dato=document.getElementById("opc_aux").value;
+	if(dato!='none' && dato!='Ninguna')
+	{
+		document.getElementById("comentario").value=dato;
+		$("#comentario").prop('disabled', true);
+	}
+	if(dato=='none')
+	{
+		document.getElementById("comentario").value="";
+		$("#comentario").prop('disabled', false);
+	}
+
 }
 function limpiarMensaje()
 {
@@ -811,6 +981,10 @@ function sendReporte(tipo_rep)
 				);
 }
 function sendEmergencia()
+{
+	openPopstatic("Esta accion enviara un mensaje de Emergencia a los administradores.<br> Desea continuar? <input type='button' class=bottom_coment onclick='sendEmergenciaOK();' value='Enviar'>",0);
+}
+function sendEmergenciaOK()
 {
 	$("#mypanel2").panel( "close" );
 	
@@ -895,7 +1069,7 @@ function getLocation()
   		SIS_LAT=lat;
   		SIS_ACCU=accu;
   		moverCentro(SIS_LAT,SIS_LON,16);
-			addMarcadores(SIS_LON,SIS_LAT,"Ubicaci&oacute;n actual<hr><strong>Enviar por correo</strong><br><input type='text' name='mail_envia'  id='mail_envia' class=input_form><br><input class=bottom_coment type='button' value='Enviar' onclick='enviaPosicion();'><br><div id=msg_error></div>","img/marker.png",45,45);
+			addMarcadores(SIS_LON,SIS_LAT,"Ubicaci&oacute;n actual<hr><strong>Enviar por correo</strong><br><input type='text' name='mail_envia'  id='mail_envia' value='"+AC_MAIL_ADMIN+"' class=input_form><br><input class=bottom_coment type='button' value='Enviar' onclick='enviaPosicion();'><br><div id=msg_error></div>","img/marker.png",45,45);
 
 			
 			$.mobile.loading( 'hide');	
@@ -936,4 +1110,38 @@ function validarEmail( email ) {
         valido=false;
         
    return valido;     
+}
+function checkEstadoConductor()
+{
+	
+	if(AC_ONLINE)
+	{
+		$("#output").load(PATH_QUERY, 
+				{tipo:34} 
+					,function(){						
+						
+					}
+				);
+	}
+}
+
+function jornadaNext()
+{
+	$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		
+		$("#contenido_usuarios").load(PATH_QUERY, 
+					{tipo:36} 
+						,function(){
+							$('#contenido_usuarios').trigger('create');
+							$.mobile.loading( 'hide');	
+							$.mobile.changePage('#mod_enrol', { role: 'dialog'});
+							
+							
+						}
+		);
 }
