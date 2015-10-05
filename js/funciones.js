@@ -171,6 +171,10 @@ function loadAccion(tipo,jornada,accion_actual)
 
         });																			
 							$.mobile.changePage('#mod_enrol', {transition: 'pop', role: 'dialog'});
+							if(tipo==4)
+							{
+								$("#comentario").prop('disabled', true);
+							}
 							
 							
 						}
@@ -178,7 +182,8 @@ function loadAccion(tipo,jornada,accion_actual)
 
 	}else
 		{
-			openPopstatic("Esta accion se encuentra actualmente iniciada.",4000);
+			
+			openPopstatic("Esta accion se encuentra actualmente iniciada.<br> <input type='button' value='Editar' class=bottom_coment onclick='loadAcciones("+tipo+");'>",0);
 		}
 		
 }
@@ -186,16 +191,21 @@ function iniciarAccion(tipo,jornada)
 {
 	//openPopstatic("Accion Iniciada",4000);
 	var fecha=$.trim(document.getElementById("desde_accion").value);
-				
+	var comentario="";
+	if(tipo==4)			
+	{
+			
+		  comentario=$.trim(document.getElementById("comentario").value);
+	}
 				var time=fecha;
-	$.mobile.loading( 'show', {
+					$.mobile.loading( 'show', {
 				text: 'Iniciando...',
 				textVisible: true,
 				theme: 'a',
 				html: ""
 			});
 	$("#output").load(PATH_QUERY, 
-					{tipo:17,tip_opc:tipo,jornada:jornada, fecha:time} 
+					{tipo:17,tip_opc:tipo,jornada:jornada, fecha:time, comentario:comentario} 
 						,function(){
 							
 							
@@ -653,7 +663,7 @@ $.mobile.loading( 'show', {
 function iniciarJornada(id_jornada)
 {
 	var desde_ec=$.trim(document.getElementById("desde_ec").value);
-	
+	var opc_inicio=$.trim(document.getElementById("opc_inicio").value);
 
 	$.mobile.loading( 'show', {
 					text: 'Cargando...',
@@ -664,7 +674,7 @@ function iniciarJornada(id_jornada)
 				
 						
 				$("#output").load(PATH_QUERY, 
-				{tipo:16, jornada:id_jornada,fecha:desde_ec } 
+				{tipo:16, jornada:id_jornada,fecha:desde_ec, opc_inicio:opc_inicio } 
 					,function(){
 					
 						
@@ -1144,4 +1154,128 @@ function jornadaNext()
 							
 						}
 		);
+}
+
+function loadAcciones(tipo)
+{
+	$("#myPopup_static").popup("close");
+	$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		
+		$("#contenido_usuarios").load(PATH_QUERY, 
+					{tipo:37, accion:tipo} 
+						,function(){
+							$('#contenido_usuarios').trigger('create');
+							$.mobile.loading( 'hide');	
+							$.mobile.changePage('#mod_enrol', { role: 'dialog'});
+							
+							
+						}
+		);
+	
+}
+function editRegistroActual(id_accion,jornada)
+{
+			$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		
+		$("#contenido_usuarios").load(PATH_QUERY, 
+					{tipo:8,id:id_accion, jornada:jornada, actual:0} 
+						,function(){
+							$('#contenido_usuarios').trigger('create');
+							$(document).ready(function () {
+           
+             $('#desde_ec').scroller({ preset: 'datetime' });
+             $('#hasta_ec').scroller({ preset: 'datetime' });
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde_ec').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                $('#hasta_ec').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                 
+                
+            });
+
+        });	
+							$.mobile.loading( 'hide');	
+							$.mobile.changePage('#mod_enrol', { role: 'dialog'});
+							
+							
+						}
+		);
+	
+}
+
+function deleteAccion(accion,jornada)
+{
+	
+	$.mobile.loading( 'show', {
+					text: 'Eliminando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+						
+				$("#output").load(PATH_QUERY, 
+				{tipo:38, id:accion,jornada:jornada} 
+					,function(){
+						
+					}
+				);
+}
+function loadAutorizar()
+{
+	$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+						
+				$("#output").load(PATH_QUERY, 
+				{tipo:39} 
+					,function(){
+						$.mobile.loading( 'hide');	
+						
+					}
+				);
+	
+}
+
+function autoriza(tipo)
+{
+	$.mobile.loading( 'show', {
+					text: 'Almacenando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+				
+						
+				$("#output").load(PATH_QUERY, 
+				{tipo:40, opc:tipo} 
+					,function(){
+						$.mobile.loading( 'hide');	
+						
+					}
+				);
 }
