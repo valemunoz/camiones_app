@@ -992,6 +992,7 @@ function sendReporte(tipo_rep)
 }
 function sendEmergencia()
 {
+	$("#mypanel2").panel( "close" );	
 	openPopstatic("Esta accion enviara un mensaje de Emergencia a los administradores.<br> Desea continuar? <input type='button' class=bottom_coment onclick='sendEmergenciaOK();' value='Enviar'>",0);
 }
 function sendEmergenciaOK()
