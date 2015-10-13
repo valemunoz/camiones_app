@@ -307,3 +307,15 @@ font-size:150% !important;
 	font-size:100% !important;
 	color:#8E878F;
 }
+.barra_left
+{
+	float:left !important;
+	text-align:left !important;
+	color:#716B72;
+	font-size: 130%;
+}
+#pantalla_inicio
+{
+		overflow-y: auto;	
+		overflow-x:hidden; 
+}

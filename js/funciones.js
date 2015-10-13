@@ -2,9 +2,9 @@ var PATH_QUERY="http://obvii.net/obvii/app_camion/query.php";
 var AC_ONLINE=false;
 var AC_MAIL_TO=Array();
 var AC_MAIL_TO_GROUP=Array();
-	var SIS_LON=0;
-  var SIS_LAT=0;
-  var SIS_ACCU=0;
+var SIS_LON=0;
+var SIS_LAT=0;
+var SIS_ACCU=0;
 var AC_MAIL_ADMIN="";  
 
 function mensaje(CM_mensaje,titulo,div)
@@ -457,6 +457,7 @@ function loadayuda()
 		$("#pantalla_inicio").load("ayuda.html", 
 					{} 
 						,function(){
+							$("#mypanel2").panel( "close" );
 							$('#pantalla_inicio').trigger('create');
 							$.mobile.loading( 'hide');	
 							
