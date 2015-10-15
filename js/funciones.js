@@ -1,12 +1,12 @@
 var PATH_QUERY="http://obvii.net/obvii/app_camion/query.php";
-var AC_ONLINE=false;
+var AC_ONLINE=20;
 var AC_MAIL_TO=Array();
 var AC_MAIL_TO_GROUP=Array();
 var SIS_LON=0;
 var SIS_LAT=0;
 var SIS_ACCU=0;
 var AC_MAIL_ADMIN="";  
-
+var ACC_OFF=0;
 function mensaje(CM_mensaje,titulo,div)
 {
 	
@@ -44,6 +44,7 @@ function openPopstatic(contenido,tiempo)
 }
 function deviceListo()
 {
+	loadBD();
 	$.mobile.loading( 'hide');	
 	$.mobile.loading( 'show', {
 				text: 'Validando...',
@@ -584,18 +585,35 @@ function cerrarSesion()
 }
 function offline()
 {
+	//alert("F:"+AC_ONLINE);
 	
-	
-	if(AC_ONLINE)
+	if(AC_ONLINE && AC_ONLINE!=20)
 	{
 		AC_ONLINE=false;
+		
 		window.location.href="index.html";
-	}
-	AC_ONLINE=false;
+	}else
+		{
+			AC_ONLINE=false;
+			//validamos si existe sesion pendiente
+			//getJornadaBD();
+	 		//getSesionBD();
+			//setTimeout("validaBDJornada();",700);
+			
+		}
 }
+
 function online()
 {
-	AC_ONLINE=true;
+	//alert("T:"+AC_ONLINE);
+	if(!AC_ONLINE)
+	{
+		AC_ONLINE=true;
+		window.location.href="index.html";
+	}else
+		{
+		AC_ONLINE=true;
+	}
 }
 function loadLogin()
 {
@@ -1281,3 +1299,376 @@ function autoriza(tipo)
 					}
 				);
 }
+
+/* BD*/
+var db = openDatabase('MyDB', '1.0', 'My Sample DB', 10000 * 1024);
+var USER_FECHA=Array();				 	    	
+var USER_ID=Array();				 	    	
+var USER_USER=Array();				 	    	
+var USER_CLAVE=Array();	
+var JORNADA_ID=Array();				 	    	
+var JORNADA_FECHA=Array();				 	    	
+var JORNADA_ESTADO=Array();				 	    	
+var JORNADA_USUARIO=Array();
+	var JORNADA_ORIGEN=Array();		
+	var JORNADA_DESTINO=Array();		
+	var JORNADA_PATENTE=Array();	
+	var JORNADA_FECHA_FIN=Array();		
+	var ACCION_ID=Array();				 	    	
+	var ACCION_FECHA=Array();				 	    	
+	var ACCION_ESTADO=Array();				 	    	
+	var ACCION_USUARIO=Array();				 	    					 	    	
+	var ACCION_TIPO=Array();			
+	var ACCION_JORNADA=Array();					
+function loadBD()
+{
+	
+ db.transaction(function(tx) 
+ {
+ 	
+ 	//tx.executeSql('DROP TABLE jornada');
+    tx.executeSql('create table if not exists sesion(id,usuario,fecha,clave)');
+    tx.executeSql('create table if not exists accion(accion, fecha, tipo,estado, jornada, usuario)');
+    tx.executeSql('create table if not exists jornada(jornada, fecha, estado,usuario,origen,destino,patente,fecha_fin)');
+  
+	}, errorCB, successCB);    
+
+}
+function addJornadaBD(jornada,fecha,estado,usuario,origen,destino,patente,fecha_fin)
+{
+	
+	 db.transaction(function(tx) {
+ 			tx.executeSql('DROP TABLE IF EXISTS jornada');
+ 			 tx.executeSql('create table if not exists jornada(jornada, fecha, estado,usuario,origen,destino,patente,fecha_fin)');
+			 tx.executeSql('insert into jornada(jornada, fecha, estado,usuario,origen,destino,patente,fecha_fin) values (?,?,?,?,?,?,?,?)',[jornada,fecha,estado,usuario,origen,destino,patente,fecha_fin]);
+	}, errorCB, successCB);
+	
+}
+function getJornadaBD()
+{
+	db.transaction(function(tx) {  
+ 		tx.executeSql('SELECT * FROM jornada', [], selectJornada, errorCB);
+ 		
+    
+	}, errorCB, successCB); 
+}
+function selectJornada(tx, results)
+{
+	JORNADA_ID=Array();				 	    	
+	JORNADA_FECHA=Array();				 	    	
+	JORNADA_ESTADO=Array();				 	    	
+	JORNADA_USUARIO=Array();				 	    					 	    	
+	JORNADA_ORIGEN=Array();		
+	JORNADA_DESTINO=Array();		
+	JORNADA_PATENTE=Array();		
+	JORNADA_FECHA_FIN=Array();	
+
+	if (results.rows.length < 1) 
+  {
+  	//alert("no hay resultados");
+  	
+  }  
+ 	for (var i = 0; i < results.rows.length; i++) 
+ 	{
+ 		
+ 				JORNADA_ID[i] = results.rows.item(i).jornada; 				 	    	
+ 	    	JORNADA_FECHA[i] = results.rows.item(i).fecha;
+ 	    	JORNADA_FECHA_FIN[i] = results.rows.item(i).fecha_fin;
+ 	    	JORNADA_ESTADO[i]= results.rows.item(i).estado;
+ 	    	//alert(results.rows.item(i).patente);
+ 	    	JORNADA_USUARIO[i]= results.rows.item(i).usuario;
+ 	    	
+ 	    	JORNADA_ORIGEN[i]= results.rows.item(i).origen;
+ 	    	JORNADA_DESTINO[i]= results.rows.item(i).destino;
+ 	    	JORNADA_PATENTE[i]= results.rows.item(i).patente;
+ 	    	
+ 	    	
+ 	    	
+ 	  }
+ 	    
+	}
+function addSesionBD(id_us,usuario,fecha,clave)
+{
+	
+	 db.transaction(function(tx) {
+ 			tx.executeSql('DROP TABLE IF EXISTS sesion');
+ 			tx.executeSql('create table if not exists sesion(id,usuario,fecha,clave)');
+			tx.executeSql('insert into sesion(id,usuario,fecha,clave) values (?,?,?,?)',[id_us,usuario,fecha,clave]);
+	}, errorCB, successCB);
+	
+}
+function successCB(e)
+{
+	//alert("exitoso bd");
+}
+function errorCB(e)
+{
+	alert("error bd "+e.code);
+}
+function getSesionBD()
+{
+	db.transaction(function(tx) {  
+ 		tx.executeSql('SELECT * FROM sesion', [], selectSesion, errorCB);
+ 		
+    
+	}, errorCB, successCB); 
+}
+function selectSesion(tx, results)
+{
+	USER_FECHA=Array();				 	    	
+	USER_ID=Array();				 	    	
+	USER_USER=Array();				 	    	
+	USER_CLAVE=Array();				 	    	
+					 	    	
+
+	if (results.rows.length < 1) 
+  {
+  	//alert("no hay resultados");
+  	
+  }  
+ 	for (var i = 0; i < results.rows.length; i++) 
+ 	{
+ 		
+ 				USER_FECHA[i] = results.rows.item(i).fecha; 				 	    	
+ 	    	USER_ID[i] = results.rows.item(i).id;
+ 	    	USER_USER[i]= results.rows.item(i).usuario;
+ 	    	//alert(results.rows.item(i).usuario);
+ 	    	USER_CLAVE[i]= results.rows.item(i).clave;
+ 	    	
+ 	    	
+ 	    	
+ 	  }
+ 	    
+}
+function addAccionBD(accion, fecha, tipo,estado, jornada, usuario)
+{
+	/*tipo: 0 inicio 1 termino*/
+	 db.transaction(function(tx) {
+ 			//tx.executeSql('DROP TABLE IF EXISTS accion');
+ 			 tx.executeSql('create table if not exists accion(accion, fecha, tipo,estado, jornada, usuario)');
+			 tx.executeSql('insert into accion(accion, fecha, tipo,estado, jornada, usuario) values (?,?,?,?,?,?)',[accion, fecha, tipo,estado, jornada, usuario]);
+	}, errorCB, successCB);
+	
+}
+function cleanAccionBD()
+{
+	
+	 db.transaction(function(tx) {
+ 			tx.executeSql('DROP TABLE IF EXISTS accion');
+ 			 tx.executeSql('create table if not exists accion(accion, fecha, tipo,estado, jornada, usuario)');
+			 
+	}, errorCB, successCB);
+	
+}
+function getAccionBD()
+{
+	db.transaction(function(tx) {  
+ 		tx.executeSql('SELECT * FROM accion', [], selectAccion, errorCB);
+ 		
+    
+	}, errorCB, successCB); 
+}
+function selectAccion(tx, results)
+{
+	ACCION_ID=Array();				 	    	
+	ACCION_FECHA=Array();				 	    	
+	ACCION_ESTADO=Array();				 	    	
+	ACCION_USUARIO=Array();				 	    					 	    	
+	ACCION_TIPO=Array();			
+	ACCION_JORNADA=Array();			
+
+	if (results.rows.length < 1) 
+  {
+  	//alert("no hay resultados");
+  	
+  }  
+ 	for (var i = 0; i < results.rows.length; i++) 
+ 	{
+ 		
+ 				ACCION_ID[i] = results.rows.item(i).accion; 				 	    	
+ 	    	ACCION_FECHA[i] = results.rows.item(i).fecha;
+ 	    	ACCION_ESTADO[i]= results.rows.item(i).estado;
+ 	    	//alert(results.rows.item(i).fecha);
+ 	    	ACCION_USUARIO[i]= results.rows.item(i).usuario;
+ 	    	ACCION_TIPO[i]= results.rows.item(i).tipo;
+ 	    	ACCION_JORNADA[i]= results.rows.item(i).jornada;
+ 	  }
+ 	    
+	}	
+function validaBDJornada()
+{
+	
+	var fec=new Date();
+	var mes=fec.getMonth();
+	if(mes <10)
+	{
+		mes++;
+		mes="0"+mes;
+	}
+	var dia=fec.getDate();
+	if(dia <10)
+	{
+		dia="0"+dia;
+	}
+	var hora=fec.getHours();
+	if(hora <10)
+	{
+		hora="0"+hora;
+	}
+	var min=fec.getMinutes();
+	if(min <10)
+	{
+		min="0"+min;
+	}
+	var sec=fec.getSeconds();
+	if(sec <10)
+	{
+		sec="0"+sec;
+	}
+	var fecha=""+fec.getFullYear()+"-"+mes+"-"+dia+" "+hora+":"+min+":"+sec+"";
+
+	if(JORNADA_FECHA_FIN.length > 0 && Date.parse(fecha) < Date.parse(JORNADA_FECHA_FIN[0]) && JORNADA_ESTADO[0]==0 && USER_FECHA.length > 0)
+	{
+		window.location.href="index_offline.html";
+		
+	}else
+		{
+			openPopstatic("Conexion a internet no disponible y no se encuentra una jornada activa. Por favor revise su dispositivo.",0);
+		}
+}
+/*Fin BD*/
+
+/*Offline funciones*/
+function loadLoginOffline()
+{
+	getJornadaBD();
+	getSesionBD();
+	getAccionBD();
+	
+	setTimeout("loadDataOffline();",700);
+}
+function loadDataOffline()
+{
+	
+	$("#bienvenido_div").html("Bienvenido: "+USER_USER[0]);
+	
+	$("#fec_off").html(JORNADA_FECHA[0]);
+	$("#origen_off").html(JORNADA_ORIGEN[0]);
+	$("#dest_off").html(JORNADA_DESTINO[0]);
+	$("#pat_off").html(JORNADA_PATENTE[0]);
+	var ultimo="";
+	if(ACCION_ID[ACCION_ID.length-1]==1)
+	   ultimo="Conducci&oacute;n";
+	if(ACCION_ID[ACCION_ID.length-1]==2)
+	   ultimo="Espera";
+	if(ACCION_ID[ACCION_ID.length-1]==3)
+	   ultimo="Descanso";
+	if(ACCION_ID[ACCION_ID.length-1]==4)
+	   ultimo="T AUX";
+	
+	$("#actual_off").html(ultimo);
+	$("#inicio_off").html(ACCION_FECHA[ACCION_ID.length-1]);
+	var conduc=0;
+	var espera=0;
+	var descanso=0;
+	var taux=0;
+
+	openPopstatic("Actualmente se encuentra en modo offline, algunas opciones no estan disponibles hasta que se conecte a internet.",5000);
+}
+function loadAccionOffline(tipo)
+{
+	ACC_OFF=tipo;
+	var fec=new Date();
+	var mes=$.trim(fec.getMonth());
+	if(mes < 10)
+	{
+		mes++;
+		if(mes < 10)
+		{
+			mes="0"+mes;
+		}
+	}
+	var dia=fec.getDate();
+	if(dia <10)
+	{
+		dia="0"+dia;
+	}
+	var hora=fec.getHours();
+	if(hora <10)
+	{
+		hora="0"+hora;
+	}
+	var min=fec.getMinutes();
+	if(min <10)
+	{
+		min="0"+min;
+	}
+	var sec=fec.getSeconds();
+	if(sec <10)
+	{
+		sec="0"+sec;
+	}
+	var fecha=""+fec.getFullYear()+"-"+mes+"-"+dia+" "+hora+":"+min+":"+sec+"";
+	$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+		$("#contenido_usuarios").load("modal_accion.html", 
+					{} 
+						,function(){
+							getJornadaBD();
+							getSesionBD();
+							$('#contenido_usuarios').trigger('create');
+							$.mobile.loading( 'hide');	
+							
+							 			 $(document).ready(function () {
+           
+             $('#desde_accion').scroller({ preset: 'datetime' });
+            
+            wheels = [];
+            wheels[0] = { 'Hours': {} };
+            wheels[1] = { 'Minutes': {} };
+            for (var i = 0; i < 60; i++) {
+                if (i < 16) wheels[0]['Hours'][i] = (i < 10) ? ('0' + i) : i;
+                wheels[1]['Minutes'][i] = (i < 10) ? ('0' + i) : i;
+            }
+            $('#theme, #mode').change(function() {
+                var t = $('#theme').val();
+                var m = $('#mode').val();
+               
+                $('#desde_accion').scroller('destroy').scroller({ preset: 'datetime', theme: t, mode: m });
+                
+                
+                
+            });
+
+        });			
+        
+        document.getElementById("desde_accion").value=fecha; 																
+							$.mobile.changePage('#mod_enrol', {transition: 'pop', role: 'dialog'});
+						
+							
+							
+						}
+		);
+}
+function iniciarAccionOff()
+{
+	var fecha=document.getElementById("desde_accion").value;
+	if(Date.parse(fecha) < Date.parse(JORNADA_FECHA_FIN[0]) && Date.parse(fecha) > Date.parse(JORNADA_FECHA[0]))
+	{
+		addAccionBD(ACC_OFF, fecha, 0,0, JORNADA_ID[0], USER_ID[0]);	
+		$("#mod_enrol").dialog( "close" );
+		loadLoginOffline();
+		
+	}else
+		{
+			mensaje("La fecha no es valida.","Alerta","myPopup_enrol");
+			
+			
+		}
+}
+/**/
+

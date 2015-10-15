@@ -1,0 +1,159 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>CamionesApp</title>
+        <link rel="shortcut icon" href="images/icon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+				<meta name="author" content="architeq.cl" />     
+        
+        <link rel="stylesheet" href="css/themes/themes.min.css" />
+				<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/ >
+	   
+	<!-- Bootstrap core CSS -->
+    <link href="TimePicki/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="TimePicki/css/style.css" rel="stylesheet">
+    <link href="TimePicki/css/timepicki.css" rel="stylesheet">
+
+	
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/style.mobile.css" type="text/css">
+	<script src="js/jquery-1.11.1.min.js"></script>
+
+	
+	<script src="js/funciones_api_mobile_basica.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/jquery.datetimepicker.js"></script>
+	
+
+    
+	<script src="js/funciones.js"></script>
+	<script src="TimePicki/js/timepicki.js"></script>
+	
+	<script src="js/mobiscroll-1.5.js" type="text/javascript"></script>
+
+    <link href="css/mobiscroll-1.5.css" rel="stylesheet" type="text/css" />
+
+	 			<script src="cordova.js"></script>
+   			
+   			
+   			<script>
+   				$.mobile.loading( 'show', {
+				text: 'Cargando...',
+				textVisible: true,
+				theme: 'a',
+				html: ""
+			});
+   				//document.addEventListener("offline", offline, false);
+					document.addEventListener("online", online, false);
+   				document.addEventListener("deviceready", loadLoginOffline, false);
+   				
+   				</script>
+    </head>
+    <body>
+    <div data-role="page" id="mappage" data-theme="a">
+<div data-role="panel" id="mypanel2" data-theme="a" style="z-index:99999;" data-position="right" data-display="overlay">
+    	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
+						<ul data-role="listview" data-inset="true" data-divider-theme="a" id="panel_derecho">
+						    <li data-role="list-divider">Men&uacute;</li>
+						    
+						    <li><a href="javascript:window.location.href='index_offline.html';">Refrescar</a></li>
+						    <li><a href="javascript:loadHistorialMenu();">Historial</a></li>
+						    
+						    <li><a href="javascript:loadayuda();">Ayuda</a></li>
+						    <li id="men_pan"><a href="javascript:cerrarSesion();">Salir</a></li>
+						  
+						    
+						</ul>			
+						<span id=footer_txt>Versi&oacute;n 1.0</span>
+					</div><!-- /panel -->
+   		<div data-role="header">   			 
+   			
+      	<h3><img src="img/logo_peque2.png" width=70%></h3>
+      	<a id="btn-conf"  href="#mypanel2" data-icon="bars" data-role="button" data-iconpos="notext"  id="bot_conf" class="ui-btn-right">+</a>
+      	
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido_prin2" >
+
+				
+			<div data-role="popup" id="myPopup_static" class="ui-content" style="max-width:280px" data-dismissible="false">
+				    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+						<div id=cont_static></div>
+					</div>
+					<div data-role="popup" id="myPopup_pag">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					<div data-role="popup" id="myPopup">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					<div id="menu_sesion">
+					</div>
+						
+								<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:right;">
+						  		<div id=bienvenido_div></div>
+								</div>
+							<div id="pantalla_inicio">
+								<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:right;">
+					  <div id=titulo_1>Resumen de Jornada(OFFLINE)</div>
+	</div>
+	<br><br>
+	<table border=0 id=tabla_opc>
+	<tr bgcolor="#CDCDCD"><td width=25%>Fecha	Hora Inicio <td width=80%><span id="fec_off"></span></td></tr>
+	
+	
+	<tr><td width=25%>Origen	<td width=80%> <span id="origen_off"></span></td></tr>
+	<tr bgcolor="#CDCDCD"><td width=25%>Destino	<td width=80%> <span id="dest_off"></span></td></tr>
+	<tr><td width=25%>Patente		<td width=80%><span id="pat_off"></span> </td></tr>
+    	    </table><br>
+					<table id="tabla_opc" border=2px bordercolor="#D3D3D3">
+	<tr><td width=60%><strong>ACTUALMENTE</strong>		<td width=40%> <strong><span id="actual_off"></span></strong></td></tr>
+		<tr><td width=60%><strong>INICIO</strong>		<td width=40%> <strong><span id="inicio_off"></span></strong></td></tr>
+	</table>
+	<input type="button" value="CONDUCCION" onclick="loadAccionOffline(1);">
+		<input type="button" value="ESPERA" onclick="loadAccionOffline(2);">
+	<input type="button" value="DESCANSO" onclick="loadAccionOffline(3);">
+	<input type="button" value="T AUX" onclick="loadAccionOffline(4);">
+	
+    	    </div>
+    	  </div>
+    	<div data-role="footer" data-id="foo1" data-position="fixed" id="footer_txt" data-theme="b">
+				<div id="menu_footer"></div>
+    		
+    			&copy;2015 Architeq Ltda
+			</div><!-- /footer -->
+
+ </div>
+  <div data-role="page" id="mod_enrol" data-theme="a">
+
+   	<div data-role="header" >
+	   			
+      		<h3><img src="img/logo_peque2.png" width=50%></h3>
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido" >
+   	  	
+    	  	<div data-role="popup" id="myPopup_enrol">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
+					
+					
+    	    <div id="contenido_usuarios">
+						
+						
+					</div> 
+					<div id="output3"></div>         
+					
+    	</div>
+    	  
+ 		</div>	
+	
+ 		
+ 			<div id=output></div>
+
+    </body>
+</html>
