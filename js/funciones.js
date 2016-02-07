@@ -13,7 +13,7 @@ function mensaje(CM_mensaje,titulo,div)
 	var html_msg="";
 	if(titulo!="")
 	{
-		html_msg +="<div class=titulo_1>"+titulo.toUpperCase()+"</div>";
+		html_msg +="<div class=titulo_1><strong>"+titulo.toUpperCase()+"</strong></div>";
 	}
   html_msg +="<p>"+CM_mensaje+"</p>";
 	$( "#"+div ).html(html_msg); 
@@ -539,15 +539,28 @@ function addTo(to,id_to)
 {
 	
 	AC_MAIL_TO_GROUP[AC_MAIL_TO_GROUP.length]=id_to;
-	//var dest=document.getElementById("destin").innerHTML ;
-	//$( "#destin" ).html(dest+", "+to); 
+	try {
+    var dest=document.getElementById("destin2").innerHTML ;
+	$( "#destin2" ).html(dest+", "+to); 
+	}
+	catch(err) {
+    
+	}
+	
 }
 function addTo2(to,id_to)
 {
 	
 	AC_MAIL_TO[AC_MAIL_TO.length]=id_to;
-	//var dest=document.getElementById("destin2").innerHTML ;
-	//$( "#destin2" ).html(dest+", "+to); 
+	try {
+  	var dest=document.getElementById("destin2").innerHTML ;
+		$( "#destin2" ).html(dest+", "+to); 
+	}
+	catch(err) {
+    
+	}
+	
+	
 }
 function addMensajePre(texto)
 {
@@ -1671,4 +1684,5 @@ function iniciarAccionOff()
 		}
 }
 /**/
+
 
